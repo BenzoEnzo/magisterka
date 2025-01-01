@@ -1,11 +1,9 @@
 package pl.benzo.enzo.magisterka.basejava.service;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.context.WebServerInitializedEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 import pl.benzo.enzo.magisterka.basejava.model.DeregisterRequest;
 import pl.benzo.enzo.magisterka.basejava.model.RegisterRequest;
@@ -14,19 +12,12 @@ import pl.benzo.enzo.magisterka.basejava.model.ServiceIdHolder;
 
 @Service
 @RequiredArgsConstructor
-public class OnInitService implements ApplicationListener<WebServerInitializedEvent>  {
+public class OnInitService {
         private final RegistryService registryService;
         private final ServiceIdHolder serviceIdHolder;
         private String serviceId;
-        private int port;
 
-        @Value("${server.address}")
-        private String serverAddress;
-
-        @Value("${spring.application.name}")
-        private String applicationName;
-
-        public void registerService() {
+        public void registerService(String applicationName, String serverAddress, int port) {
             RegisterRequest registerRequest = new RegisterRequest(applicationName, serverAddress, port);
             try {
                 RegisterResponse registerResponse = registryService.registerService(registerRequest);
@@ -50,11 +41,4 @@ public class OnInitService implements ApplicationListener<WebServerInitializedEv
                 }
             }
         }
-
-    @Override
-    public void onApplicationEvent(WebServerInitializedEvent event) {
-        this.port = event.getWebServer().getPort();
-        System.out.println(port);
-        registerService();
-    }
 }
