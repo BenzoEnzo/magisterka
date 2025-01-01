@@ -7,7 +7,7 @@ import pl.benzo.enzo.magisterka.basejava.annotation.BenzoEnzoMagisterkaService;
 
 @SpringBootApplication
 @EnableScheduling
-@BenzoEnzoMagisterkaService(name = "domain-user-component", address = "127.0.0.1", port = 8081)
+@BenzoEnzoMagisterkaService(name = "domain-user-component", address = "localhost", port = 8080)
 public class DomainUserComponentApplication {
 
     public static void main(String[] args) {
