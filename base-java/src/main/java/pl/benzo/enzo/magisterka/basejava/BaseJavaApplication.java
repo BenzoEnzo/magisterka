@@ -6,7 +6,6 @@ import pl.benzo.enzo.magisterka.basejava.annotation.BenzoEnzoMagisterkaService;
 
 @SpringBootApplication
 @EnableScheduling
-@BenzoEnzoMagisterkaService(name = "Base0Component", address = "127.0.0.1", port = 8081)
 public class BaseJavaApplication {
     public static void main(String[] args) {
         SpringApplication.run(BaseJavaApplication.class, args);
