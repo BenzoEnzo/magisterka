@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import pl.benzo.enzo.magisterka.basejava.model.DeregisterRequest;
-import pl.benzo.enzo.magisterka.basejava.model.HeartbeatRequest;
 import pl.benzo.enzo.magisterka.basejava.model.RegisterRequest;
 import pl.benzo.enzo.magisterka.basejava.model.RegisterResponse;
+import pl.benzo.enzo.magisterka.basejava.model.ServiceIdHolder;
 import pl.benzo.enzo.magisterka.basejava.service.RegistryService;
 import pl.benzo.enzo.magisterka.basejava.service.ServerPortListener;
 
@@ -19,8 +19,8 @@ import pl.benzo.enzo.magisterka.basejava.service.ServerPortListener;
 public class BaseJavaApplication implements CommandLineRunner {
 
     private final RegistryService registryService;
-    private final ThreadPoolTaskScheduler scheduler;
     private final ServerPortListener serverPortListener;
+    private final ServiceIdHolder serviceIdHolder;
     private String serviceId;
 
     @Value("${server.address}")
@@ -39,12 +39,13 @@ public class BaseJavaApplication implements CommandLineRunner {
         try {
             RegisterResponse registerResponse = registryService.registerService(registerRequest);
             serviceId = registerResponse.getId();
+            serviceIdHolder.setServiceId(serviceId);
             System.out.println("Registered with ID: " + serviceId);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return;
         }
-        
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 DeregisterRequest deregisterRequest = new DeregisterRequest(serviceId);

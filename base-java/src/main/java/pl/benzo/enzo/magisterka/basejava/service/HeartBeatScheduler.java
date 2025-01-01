@@ -1,8 +1,7 @@
 package pl.benzo.enzo.magisterka.basejava.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.benzo.enzo.magisterka.basejava.model.HeartbeatRequest;
 import pl.benzo.enzo.magisterka.basejava.model.ServiceIdHolder;
@@ -11,11 +10,10 @@ import pl.benzo.enzo.magisterka.basejava.model.ServiceIdHolder;
 @RequiredArgsConstructor
 public class HeartBeatScheduler {
     private final RegistryService registryService;
-    private final ThreadPoolTaskScheduler scheduler;
-    private ServiceIdHolder serviceIdHolder;
+    private final ServiceIdHolder serviceIdHolder;
 
+    @Scheduled(fixedDelay = 5000)
     public void scheduleHeartbeat() {
-        scheduler.scheduleAtFixedRate(() -> {
             String serviceId = serviceIdHolder.getServiceId();
             if (serviceId != null) {
                 try {
@@ -28,6 +26,5 @@ public class HeartBeatScheduler {
             } else {
                 System.err.println("Service ID is not set. Heartbeat not sent.");
             }
-        }, 10000);
     }
 }
