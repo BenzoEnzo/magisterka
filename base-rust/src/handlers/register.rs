@@ -1,6 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 use uuid::Uuid;
-use log::{info, error};
+use log::{info};
 use crate::models::{RegisterRequest, RegisterResponse, ServiceInstance};
 use crate::state::AppState;
 
@@ -17,7 +17,7 @@ pub async fn register_service(
         port: req.port,
         last_heartbeat: std::time::SystemTime::now(),
     };
-    services.insert(id.clone(), service);
+    services.insert(id.clone(), service.clone());
     info!("Registered service: {:?}", service);
     HttpResponse::Ok().json(RegisterResponse { id })
 }

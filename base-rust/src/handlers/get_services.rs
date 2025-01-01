@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use log::{info, error};
+use log::{info};
 use crate::models::ServiceInstance;
 use crate::state::AppState;
 
